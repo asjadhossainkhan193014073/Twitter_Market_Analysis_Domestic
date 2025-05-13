@@ -1,0 +1,1 @@
+Hello people, if you see my other Github repositories, you will see I have this exact same project but it was the version that pulled tweets from X (twitter). This one is kind of an approach to that if you want to analyze your sentiment using a local dataset. I created this as I couldn't pay for the 25,000$ fee for more analysis.
