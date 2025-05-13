@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Result</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles.css')}}">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load("current", {packages:["corechart"]});
+      google.charts.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Text Sentiment', 'Sentiment'],
+          ['Positive',{{P}}],
+          ['Negative',{{N}}],
+          ['Neutral',{{NU}}]
+        ]);
+
+        var options = {
+          title: 'Sentiment Analysis Results',
+          is3D: true,
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
+        chart.draw(data, options);
+      }
+    </script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['bar']});
+      google.charts.setOnLoadCallback(drawStuff);
+
+      function drawStuff() {
+        var data = new google.visualization.arrayToDataTable([
+          ['Emotion', 'Count'],
+          ["Happy",{{happy}}],
+          ["Sad", {{sad}}],
+          ["Angry", {{angry}}],
+          ["Loved", {{loved}}],
+          ['Surprise', {{surprise}}],
+          ['Fearless', {{fearless}}],
+          ['Cheated', {{cheated}}],
+          ['Attracted', {{attracted}}],
+          ['Singledout', {{singledout}}],
+          ['Anxious', {{anxious}}],
+          ['Powerless', {{powerless}}]
+        ]);
+
+        var options = {
+          title: 'Emotion Analysis of Text Data',
+          width: 600,
+          legend: { position: 'none' },
+          chart: {
+            title: 'Emotion Analysis',
+            subtitle: 'Total Count'
+          },
+          bars: 'horizontal',
+          axes: {
+            x: {
+              0: { side: 'top', label: 'Count'}
+            }
+          },
+          bar: { groupWidth: "90%" }
+        };
+
+        var chart = new google.charts.Bar(document.getElementById('top_x_div'));
+        chart.draw(data, options);
+      };
+    </script>
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <div id="branding">
+          <h1><span class="highlight">Market</span> Analysis</h1>
+        </div>
+        <nav>
+          <ul>
+            <li> <a href="/">Home</a> </li>
+            <li class="current"> <a href="/result">Result</a> </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <section id="showcase">
+      <div class="container">
+        <h1>Market Analysis Results</h1>
+        <p>Analysis of the provided market data.</p>
+      </div>
+    </section>
+    <section>
+      <div class="container1">
+        <div id="piechart_3d" style="width: 750px; height: 500px;"></div>
+        <div id="top_x_div" style="width: 600px; height: 500px;" ></div>
+      </div>
+    </section>
+    <section id ="bor">
+      <div class="container">
+        <h1 id="hea">Analysis of Text Data</h1>
+        <div>
+        {% if error_message %}
+          <p class="error-message">{{ error_message }}</p>
+        {% else %}
+            <div id="market-summary">
+                <p><strong>Market Summary:</strong></p>
+                {% if P > N and P > NU %}
+                    <p class="positive-summary">Market is good. It is a good time to post.</p>
+                {% elif N > P and N > NU %}
+                    <p class="negative-summary">Market is bad. It is a bad time to post.</p>
+                {% elif NU > P and NU > N %}
+                    <p class="neutral-summary">Market is good. You can post if you wish to.</p>
+                {% else %}
+                    <p>Market sentiment is mixed. Exercise caution.</p>
+                {% endif %}
+            </div>
+          {% for original_text, sentiment in outputs.items() %}
+            <p><span class="tweet1">Original Text:</span> <span class="tweet2">{{ original_text }}</span></p>
+            <p><span class="tweet1">Predicted Sentiment:</span> <span class="tweet2">{{ sentiment }}</span></p>
+            <br>
+          {% endfor %}
+        {% endif %}
+        </div>
+      </div>
+    </section>
+    <footer>
+      <p>Team-ARE, Copyright &copy; 2025</p>
+    </footer>
+  </body>
+</html>
